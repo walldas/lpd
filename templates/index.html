@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+
+{% block head%}{% if current_user.lang == "LT" %} Pagrindinis {% else %} Main {% endif %}{% endblock %}
+
+
+
+
+{% block page%}
+{% if current_user.confirmed == "False" and current_user.name|length > 1 %} 
+	<div class=" page text-center">
+	{% if current_user.lang == "LT" %}
+		<p> Prašome palaukti kol jus patvirtins administratorius</p>
+	{% else %}
+		<p>Please wait while administrator approves you</p>
+	{% endif %}
+
+	</div>
+{% endif %}
+
+
+
+
+
+
+
+<div class=" page">
+<h1> {% if current_user.lang == "LT" %} Apie LPD {% else %} About LPD {% endif %}</h1><hr>
+<p>{% if current_user.lvl == 2%}
+	<a href="/edit_about/{{data.id}}" class="btn btn-success pull-right">  {% if current_user.lang == "LT" %} Redaguoti {% else %} Edit {% endif %}</a>
+	{% endif %}
+	
+	{% if current_user.lang == "LT" %} 
+		{% set arr = data.text.split('\n') %}
+	{% else %} 
+		{% set arr = data.text_en.split('\n') %}
+	{% endif %}
+	
+		
+		{% for line in arr %}
+			{# In the Jinja template #}
+			{{line|safe}}<br>
+		
+		{% endfor %}
+	
+</p>
+<a href="/history/" class="btn btn-outline-primary border">  {% if current_user.lang == "LT" %} toliau {% else %} more {% endif %}</a>
+</div>
+
+<a href="/Naujienos/" class="text-dark text-decoration-none">
+<div class=" page"><h2>{% if current_user.lang == "LT" %} Renginai{% else %} Events {% endif %}</h2>
+
+<hr>
+   
+{% if news|length == 0%}
+	<div class = " ">
+		<p>  {% if current_user.lang == "LT" %} Naujienų sąrašas tuščias{% else %} Empty list {% endif %}</p>
+	</div>
+{% else %}
+	{% for new in news %}
+		{% if new.title|length > 0%}
+			<div class = " ">
+				<p><b><big> {% if current_user.lang == "LT" %} {{new.title}} {% else %} {{new.title_en}} {% endif %} </big> </b> {{new.date}} - {{new.location}}</p>
+				
+			</div>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+
+
+</div>
+</a>
+{% endblock %}
